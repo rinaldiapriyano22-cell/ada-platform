@@ -47,7 +47,7 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
       <a href="../produk.html">▤ &nbsp; Katalog</a>
       <a href="../demo.html">▷ &nbsp; Demo Center</a>
       <a href="#manage-products" data-view="products">◇ &nbsp; Produk</a>
-      <a href="#manage-categories" data-view="categories">▧ &nbsp; Kategori</a>
+      <a href="#categories" data-view="categories">▧ &nbsp; Kategori</a>
     </nav>
     <div class="side-foot">Application Development Agency<br>Building Digital Solutions.</div>
   </aside>
@@ -63,8 +63,8 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
         <article class="card"><div class="card-top"><span>Kategori Aktif</span><span class="ico">▧</span></div><div class="number" id="categoryCount">—</div><div class="hint">Kategori aplikasi</div></article>
         <article class="card"><div class="card-top"><span>Demo Publik</span><span class="ico">▷</span></div><div class="number" id="demoCount">—</div><div class="hint">Produk dengan tautan demo publik</div></article>
       </section>
-      <section class="section" id="productsSummary"><div class="section-head"><h2>Produk Terbaru</h2><span class="status">Terhubung ke Supabase</span></div><div class="panel" id="productPanel"><div class="empty">Memuat data produk...</div></div></section>
-      <section class="section" id="categoriesSummary"><div class="section-head"><h2>Ringkasan Kategori</h2></div><div class="panel" id="categoryPanel"><div class="empty">Memuat kategori...</div></div></section>
+      <section class="section" id="products"><div class="section-head"><h2>Produk Terbaru</h2><span class="status">Terhubung ke Supabase</span></div><div class="panel" id="productPanel"><div class="empty">Memuat data produk...</div></div></section>
+      <section class="section" id="categories"><div class="section-head"><h2>Ringkasan Kategori</h2></div><div class="panel" id="categoryPanel"><div class="empty">Memuat kategori...</div></div></section>
     </div>
     <div class="content admin-view hidden" id="productsView">
       <div class="eyebrow">MANAJEMEN KATALOG</div><h1 class="heading">Manajemen Produk</h1>
@@ -91,8 +91,21 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
       <div class="notice">Jika penyimpanan ditolak, kebijakan RLS untuk operasi INSERT, UPDATE, atau DELETE pada tabel products dan product_categories perlu diaktifkan untuk admin.</div>
     </div>
     <div class="content admin-view hidden" id="categoriesView">
-      <div class="eyebrow">PENGELOMPOKAN</div><h1 class="heading">Kategori</h1><p class="sub">Daftar kategori yang tersedia untuk produk ADA.</p>
+      <div class="eyebrow">PENGELOMPOKAN</div><h1 class="heading">Manajemen Kategori</h1><p class="sub">Kelola kategori produk ADA. Kategori lama tetap dipertahankan.</p>
+      <div class="panel" style="padding:22px;margin-bottom:18px">
+        <div class="section-head"><h2 id="categoryFormTitle">Tambah Kategori</h2><button class="logout" type="button" id="resetCategoryForm">Kosongkan Form</button></div>
+        <form id="categoryForm">
+          <input type="hidden" id="editCategoryId">
+          <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <label class="field"><span>Nama Kategori *</span><input id="categoryName" required maxlength="80" placeholder="Contoh: Aplikasi Web" style="width:100%;padding:13px;border:1px solid #dfe3eb;border-radius:10px"></label>
+            <label class="field"><span>Slug *</span><input id="categorySlug" required maxlength="100" placeholder="aplikasi-web" style="width:100%;padding:13px;border:1px solid #dfe3eb;border-radius:10px"></label>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px"><button class="primary" id="saveCategoryButton" type="submit" style="width:auto;min-width:170px">Simpan Kategori</button><span id="categoryFormMessage" class="crumb" role="status"></span></div>
+        </form>
+      </div>
+      <div class="section-head"><h2>Daftar Kategori</h2><button class="logout" type="button" id="refreshCategories">Muat Ulang</button></div>
       <div class="panel" id="manageCategoryPanel"><div class="empty">Memuat kategori...</div></div>
+      <div class="notice">Kategori yang sudah digunakan produk tidak dihapus permanen. Gunakan Aktif/Nonaktif agar relasi produk tetap aman.</div>
     </div>
   </main>
 </div>
@@ -123,24 +136,16 @@ async function loadDashboard(){
   $("categoryPanel").innerHTML=categories.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${categories.map(c=>`<span style="border:1px solid #e7eaf1;border-radius:20px;padding:8px 12px;font-size:12px">${esc(c.name)}${c.is_active?'':' · nonaktif'}</span>`).join("")}</div>`:'<div class="empty">Belum ada kategori.</div>';
 }
 let cachedProducts=[];
-function setAdminView(view, updateHash=true){
+function setAdminView(view){
   const map={dashboard:'dashboardView',products:'productsView',categories:'categoriesView'};
-  if(!map[view]) view='dashboard';
   Object.entries(map).forEach(([key,id])=>$(id).classList.toggle('hidden',key!==view));
   document.querySelectorAll('.nav a[data-view]').forEach(a=>a.classList.toggle('active',a.dataset.view===view));
-  const labels={dashboard:'Dashboard',products:'Manajemen Produk',categories:'Manajemen Kategori'};
-  document.querySelector('.crumb strong').textContent=labels[view];
-  const hashes={dashboard:'#dashboard',products:'#manage-products',categories:'#manage-categories'};
-  if(updateHash && location.hash!==hashes[view]) history.replaceState(null,'',hashes[view]);
+  const labels={dashboard:'Dashboard',products:'Manajemen Produk',categories:'Kategori'};
+  document.querySelector('.crumb strong').textContent=labels[view]||'Dashboard';
   if(view==='products')loadManageProducts();
   if(view==='categories')loadManageCategories();
 }
 document.querySelectorAll('.nav a[data-view]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setAdminView(a.dataset.view);}));
-window.addEventListener('hashchange',()=>{
-  const hash=location.hash;
-  const view=hash==='#manage-products' || hash==='#products' ? 'products' : hash==='#manage-categories' || hash==='#categories' ? 'categories' : 'dashboard';
-  setAdminView(view,false);
-});
 function resetProductForm(){ $('productForm').reset();$('editProductId').value='';$('productFormTitle').textContent='Tambah Produk';$('saveProductButton').textContent='Simpan Produk';$('productFormMessage').textContent=''; }
 $('resetProductForm').addEventListener('click',resetProductForm);
 $('pName').addEventListener('input',()=>{if(!$('editProductId').value)$('pSlug').value=$('pName').value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');});
@@ -186,7 +191,23 @@ $('productForm').addEventListener('submit',async e=>{
  $('productFormMessage').textContent='Produk berhasil disimpan.';resetProductForm();await loadManageProducts();await loadDashboard();btn.disabled=false;
 });
 $('refreshProducts').addEventListener('click',loadManageProducts);
-async function loadManageCategories(){const {data,error}=await adaDb.from('categories').select('id,name,slug,is_active').order('name');$('manageCategoryPanel').innerHTML=error?'<div class="empty">Gagal memuat kategori.</div>':(data||[]).length?`<div style="display:flex;gap:9px;flex-wrap:wrap">${data.map(c=>`<span style="border:1px solid #e7eaf1;border-radius:18px;padding:9px 13px;font-size:12px">${esc(c.name)}${c.is_active?'':' · nonaktif'}</span>`).join('')}</div>`:'<div class="empty">Belum ada kategori.</div>';}
+let cachedCategories=[];
+function resetCategoryForm(){ $('categoryForm').reset();$('editCategoryId').value='';$('categoryFormTitle').textContent='Tambah Kategori';$('saveCategoryButton').textContent='Simpan Kategori';$('categoryFormMessage').textContent=''; }
+$('resetCategoryForm').addEventListener('click',resetCategoryForm);
+$('categoryName').addEventListener('input',()=>{if(!$('editCategoryId').value)$('categorySlug').value=$('categoryName').value.toLowerCase().trim().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');});
+async function loadManageCategories(){
+ $('manageCategoryPanel').innerHTML='<div class="empty">Memuat kategori...</div>';
+ const {data,error}=await adaDb.from('categories').select('id,name,slug,is_active').order('name');
+ if(error){$('manageCategoryPanel').innerHTML='<div class="empty">Gagal memuat kategori. Periksa izin SELECT tabel categories.</div>';console.error(error);return;}
+ cachedCategories=data||[];
+ $('manageCategoryPanel').innerHTML=cachedCategories.length?`<div style="overflow:auto"><table><thead><tr><th>Nama Kategori</th><th>Slug</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${cachedCategories.map(c=>`<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.slug)}</td><td>${c.is_active?'Aktif':'Nonaktif'}</td><td><button class="action-btn" data-category-edit="${esc(c.id)}">Edit</button><button class="action-btn" data-category-toggle="${esc(c.id)}">${c.is_active?'Nonaktifkan':'Aktifkan'}</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Belum ada kategori.</div>';
+ $('manageCategoryPanel').querySelectorAll('[data-category-edit]').forEach(b=>b.addEventListener('click',()=>editCategory(b.dataset.categoryEdit)));
+ $('manageCategoryPanel').querySelectorAll('[data-category-toggle]').forEach(b=>b.addEventListener('click',()=>toggleCategory(b.dataset.categoryToggle)));
+}
+function editCategory(id){const c=cachedCategories.find(x=>String(x.id)===String(id));if(!c)return;$('editCategoryId').value=c.id;$('categoryName').value=c.name||'';$('categorySlug').value=c.slug||'';$('categoryFormTitle').textContent='Edit Kategori';$('saveCategoryButton').textContent='Perbarui Kategori';$('categoryFormMessage').textContent='Mode edit aktif.';window.scrollTo({top:0,behavior:'smooth'});}
+async function toggleCategory(id){const c=cachedCategories.find(x=>String(x.id)===String(id));if(!c)return;const next=!c.is_active;if(!confirm(`${next?'Aktifkan':'Nonaktifkan'} kategori "${c.name}"?`))return;const {error}=await adaDb.from('categories').update({is_active:next}).eq('id',id);if(error){alert('Status kategori gagal diperbarui. Periksa izin UPDATE dan kebijakan RLS tabel categories.');console.error(error);return;}await loadManageCategories();await loadCategoryOptions();await loadDashboard();}
+$('categoryForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('saveCategoryButton');btn.disabled=true;$('categoryFormMessage').textContent='Menyimpan...';const id=$('editCategoryId').value;const payload={name:$('categoryName').value.trim(),slug:$('categorySlug').value.trim().toLowerCase()};const result=id?await adaDb.from('categories').update(payload).eq('id',id).select('id').single():await adaDb.from('categories').insert(payload).select('id').single();btn.disabled=false;if(result.error){$('categoryFormMessage').textContent='Gagal menyimpan kategori. Periksa izin INSERT/UPDATE, RLS, dan pastikan slug belum digunakan.';console.error(result.error);return;}$('categoryFormMessage').textContent='Kategori berhasil disimpan.';resetCategoryForm();$('categoryFormMessage').textContent='Kategori berhasil disimpan.';await loadManageCategories();await loadCategoryOptions();await loadDashboard();});
+$('refreshCategories').addEventListener('click',loadManageCategories);
 async function verifySession(session){
   if(!session?.user){showLogin();return;}
   const {data:profile,error}=await adaDb.from("profiles").select("role,is_active,full_name").eq("id",session.user.id).maybeSingle();
@@ -195,9 +216,7 @@ async function verifySession(session){
   showApp(session.user);
   await loadDashboard();
   await loadCategoryOptions();
-  const initialHash=location.hash;
-  const initialView=initialHash==='#manage-products' || initialHash==='#products' ? 'products' : initialHash==='#manage-categories' || initialHash==='#categories' ? 'categories' : 'dashboard';
-  setAdminView(initialView,false);
+  setAdminView("dashboard");
 }
 $("loginForm").addEventListener("submit",async e=>{
   e.preventDefault();const btn=$("loginButton");btn.disabled=true;btn.textContent="Memeriksa...";
