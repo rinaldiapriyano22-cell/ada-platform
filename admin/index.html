@@ -17,6 +17,31 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
 .hidden{display:none!important}
 .field input,.field select,.field textarea{font:inherit;color:var(--ink)}
 #manageProductPanel table{width:100%;border-collapse:collapse;font-size:12px;min-width:680px}#manageProductPanel th,#manageProductPanel td{padding:12px 9px;text-align:left;border-bottom:1px solid #edf0f5}#manageProductPanel th{color:var(--muted);font-weight:700}#manageProductPanel .action-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;margin:2px;font-size:11px;color:var(--ink)}#manageProductPanel .delete-btn{color:#b42318}
+/* Category table — refined ADA admin style */
+#manageCategoryPanel{padding:8px 18px 14px;}
+#manageCategoryPanel .category-table-wrap{overflow-x:auto;width:100%;}
+#manageCategoryPanel table{width:100%;min-width:720px;border-collapse:separate;border-spacing:0;font-size:13px;}
+#manageCategoryPanel thead th{padding:15px 14px;text-align:left;background:#f8f9fc;color:#667085;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #e8ebf2;white-space:nowrap;}
+#manageCategoryPanel thead th:first-child{border-radius:10px 0 0 0;}
+#manageCategoryPanel thead th:last-child{border-radius:0 10px 0 0;}
+#manageCategoryPanel tbody td{padding:14px;border-bottom:1px solid #eef0f5;color:#344054;vertical-align:middle;}
+#manageCategoryPanel tbody tr{transition:background .18s ease;}
+#manageCategoryPanel tbody tr:hover{background:#fbf8fc;}
+#manageCategoryPanel tbody tr:last-child td{border-bottom:0;}
+#manageCategoryPanel .category-name{font-weight:700;color:#172033;}
+#manageCategoryPanel .category-slug{font-size:12px;color:#7b8496;}
+#manageCategoryPanel .type-pill,#manageCategoryPanel .state-pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap;}
+#manageCategoryPanel .type-application{background:#edf4ff;color:#315da8;}
+#manageCategoryPanel .type-service{background:#eaf8f5;color:#16836f;}
+#manageCategoryPanel .type-solution{background:#f5edfb;color:#8752a6;}
+#manageCategoryPanel .state-active{background:#e9f8ef;color:#16834b;}
+#manageCategoryPanel .state-inactive{background:#f2f3f5;color:#667085;}
+#manageCategoryPanel .category-actions{display:flex;gap:7px;align-items:center;white-space:nowrap;}
+#manageCategoryPanel .action-btn{border:1px solid #e2e6ee;background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;color:#344054;transition:all .18s ease;}
+#manageCategoryPanel .action-btn:hover{border-color:#b43a83;color:#a72f79;background:#fff8fc;}
+#manageCategoryPanel .action-btn.toggle{color:#667085;}
+#manageCategoryPanel .action-btn.toggle:hover{border-color:#cbd5e1;background:#f8fafc;color:#344054;}
+
 @media(max-width:650px){#productsView>div:first-child{min-width:0}}
 @media(max-width:950px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{grid-template-columns:210px 1fr}.content{padding:25px}}
 @media(max-width:650px){.shell{display:block}.sidebar{padding:12px 14px}.brand{padding:4px 5px 12px}.side-label,.side-foot{display:none}.nav{display:grid;grid-template-columns:repeat(3,1fr)}.nav a{text-align:center;padding:9px 4px;font-size:11px}.topbar{height:58px;padding:0 16px}.content{padding:22px 16px}.cards{grid-template-columns:1fr 1fr;gap:10px}.card{padding:14px}.number{font-size:25px}.heading{font-size:24px}}
@@ -201,7 +226,7 @@ async function loadManageCategories(){
  const {data,error}=await adaDb.from('categories').select('id,name,slug,category_type,is_active').order('name');
  if(error){$('manageCategoryPanel').innerHTML='<div class="empty">Gagal memuat kategori. Periksa izin SELECT tabel categories.</div>';console.error(error);return;}
  cachedCategories=data||[];
- $('manageCategoryPanel').innerHTML=cachedCategories.length?`<div style="overflow:auto"><table><thead><tr><th>Nama Kategori</th><th>Slug</th><th>Jenis</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${cachedCategories.map(c=>`<tr><td><strong>${esc(c.name)}</strong></td><td>${esc(c.slug)}</td><td>${esc(c.category_type||'-')}</td><td>${c.is_active?'Aktif':'Nonaktif'}</td><td><button class="action-btn" data-category-edit="${esc(c.id)}">Edit</button><button class="action-btn" data-category-toggle="${esc(c.id)}">${c.is_active?'Nonaktifkan':'Aktifkan'}</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Belum ada kategori.</div>';
+ $('manageCategoryPanel').innerHTML=cachedCategories.length?`<div class="category-table-wrap"><table><thead><tr><th>Nama Kategori</th><th>Slug</th><th>Jenis</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${cachedCategories.map(c=>`<tr><td><span class="category-name">${esc(c.name)}</span></td><td><span class="category-slug">${esc(c.slug)}</span></td><td><span class="type-pill type-${esc(c.category_type||'solution')}">${esc(c.category_type||'-')}</span></td><td><span class="state-pill ${c.is_active?'state-active':'state-inactive'}">${c.is_active?'Aktif':'Nonaktif'}</span></td><td><div class="category-actions"><button class="action-btn" data-category-edit="${esc(c.id)}">Edit</button><button class="action-btn toggle" data-category-toggle="${esc(c.id)}">${c.is_active?'Nonaktifkan':'Aktifkan'}</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Belum ada kategori.</div>';
  $('manageCategoryPanel').querySelectorAll('[data-category-edit]').forEach(b=>b.addEventListener('click',()=>editCategory(b.dataset.categoryEdit)));
  $('manageCategoryPanel').querySelectorAll('[data-category-toggle]').forEach(b=>b.addEventListener('click',()=>toggleCategory(b.dataset.categoryToggle)));
 }
