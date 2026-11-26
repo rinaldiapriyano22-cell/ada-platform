@@ -47,7 +47,7 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
       <a href="../produk.html">▤ &nbsp; Katalog</a>
       <a href="../demo.html">▷ &nbsp; Demo Center</a>
       <a href="#manage-products" data-view="products">◇ &nbsp; Produk</a>
-      <a href="#categories" data-view="categories">▧ &nbsp; Kategori</a>
+      <a href="#manage-categories" data-view="categories">▧ &nbsp; Kategori</a>
     </nav>
     <div class="side-foot">Application Development Agency<br>Building Digital Solutions.</div>
   </aside>
@@ -63,8 +63,8 @@ button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:
         <article class="card"><div class="card-top"><span>Kategori Aktif</span><span class="ico">▧</span></div><div class="number" id="categoryCount">—</div><div class="hint">Kategori aplikasi</div></article>
         <article class="card"><div class="card-top"><span>Demo Publik</span><span class="ico">▷</span></div><div class="number" id="demoCount">—</div><div class="hint">Produk dengan tautan demo publik</div></article>
       </section>
-      <section class="section" id="products"><div class="section-head"><h2>Produk Terbaru</h2><span class="status">Terhubung ke Supabase</span></div><div class="panel" id="productPanel"><div class="empty">Memuat data produk...</div></div></section>
-      <section class="section" id="categories"><div class="section-head"><h2>Ringkasan Kategori</h2></div><div class="panel" id="categoryPanel"><div class="empty">Memuat kategori...</div></div></section>
+      <section class="section" id="productsSummary"><div class="section-head"><h2>Produk Terbaru</h2><span class="status">Terhubung ke Supabase</span></div><div class="panel" id="productPanel"><div class="empty">Memuat data produk...</div></div></section>
+      <section class="section" id="categoriesSummary"><div class="section-head"><h2>Ringkasan Kategori</h2></div><div class="panel" id="categoryPanel"><div class="empty">Memuat kategori...</div></div></section>
     </div>
     <div class="content admin-view hidden" id="productsView">
       <div class="eyebrow">MANAJEMEN KATALOG</div><h1 class="heading">Manajemen Produk</h1>
@@ -123,16 +123,24 @@ async function loadDashboard(){
   $("categoryPanel").innerHTML=categories.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${categories.map(c=>`<span style="border:1px solid #e7eaf1;border-radius:20px;padding:8px 12px;font-size:12px">${esc(c.name)}${c.is_active?'':' · nonaktif'}</span>`).join("")}</div>`:'<div class="empty">Belum ada kategori.</div>';
 }
 let cachedProducts=[];
-function setAdminView(view){
+function setAdminView(view, updateHash=true){
   const map={dashboard:'dashboardView',products:'productsView',categories:'categoriesView'};
+  if(!map[view]) view='dashboard';
   Object.entries(map).forEach(([key,id])=>$(id).classList.toggle('hidden',key!==view));
   document.querySelectorAll('.nav a[data-view]').forEach(a=>a.classList.toggle('active',a.dataset.view===view));
-  const labels={dashboard:'Dashboard',products:'Manajemen Produk',categories:'Kategori'};
-  document.querySelector('.crumb strong').textContent=labels[view]||'Dashboard';
+  const labels={dashboard:'Dashboard',products:'Manajemen Produk',categories:'Manajemen Kategori'};
+  document.querySelector('.crumb strong').textContent=labels[view];
+  const hashes={dashboard:'#dashboard',products:'#manage-products',categories:'#manage-categories'};
+  if(updateHash && location.hash!==hashes[view]) history.replaceState(null,'',hashes[view]);
   if(view==='products')loadManageProducts();
   if(view==='categories')loadManageCategories();
 }
 document.querySelectorAll('.nav a[data-view]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setAdminView(a.dataset.view);}));
+window.addEventListener('hashchange',()=>{
+  const hash=location.hash;
+  const view=hash==='#manage-products' || hash==='#products' ? 'products' : hash==='#manage-categories' || hash==='#categories' ? 'categories' : 'dashboard';
+  setAdminView(view,false);
+});
 function resetProductForm(){ $('productForm').reset();$('editProductId').value='';$('productFormTitle').textContent='Tambah Produk';$('saveProductButton').textContent='Simpan Produk';$('productFormMessage').textContent=''; }
 $('resetProductForm').addEventListener('click',resetProductForm);
 $('pName').addEventListener('input',()=>{if(!$('editProductId').value)$('pSlug').value=$('pName').value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');});
@@ -187,7 +195,9 @@ async function verifySession(session){
   showApp(session.user);
   await loadDashboard();
   await loadCategoryOptions();
-  setAdminView("dashboard");
+  const initialHash=location.hash;
+  const initialView=initialHash==='#manage-products' || initialHash==='#products' ? 'products' : initialHash==='#manage-categories' || initialHash==='#categories' ? 'categories' : 'dashboard';
+  setAdminView(initialView,false);
 }
 $("loginForm").addEventListener("submit",async e=>{
   e.preventDefault();const btn=$("loginButton");btn.disabled=true;btn.textContent="Memeriksa...";
