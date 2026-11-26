@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin ADA — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#172033;--muted:#657086;--brand:#a72f79;--aqua:#39c5c9;--line:#e7eaf1;--soft:#f6f7fb;--navy:#111827}
+*{box-sizing:border-box}body{margin:0;background:#f6f7fb;color:var(--ink);font-family:Inter,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#111827;color:#fff;padding:25px 18px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 30px;font-family:Manrope,sans-serif;font-size:21px;font-weight:800}.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#38c7c8,#a72f79);display:grid;place-items:center;color:#fff;font-weight:800}.side-label{color:#8f9bb0;font-size:10px;letter-spacing:1.5px;font-weight:700;padding:10px 12px}.nav{display:flex;flex-direction:column;gap:6px}.nav a{padding:12px;border-radius:10px;color:#cbd5e1;text-decoration:none;font-size:13px}.nav a.active,.nav a:hover{background:#293247;color:#fff}.side-foot{margin-top:auto;padding:15px 10px;color:#9ca3af;font-size:11px;line-height:1.6}
+.main{min-width:0}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px}.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#f6e8f1;color:var(--brand);display:grid;place-items:center;font-weight:800}.logout{border:1px solid var(--line);background:#fff;padding:9px 13px;border-radius:9px;color:var(--ink);font-size:12px}
+.content{padding:32px;max-width:1400px;margin:auto}.eyebrow{font-size:11px;letter-spacing:1.4px;color:var(--brand);font-weight:800}.heading{font:800 29px Manrope,sans-serif;margin:8px 0}.sub{color:var(--muted);font-size:14px;margin:0 0 26px}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;box-shadow:0 4px 18px rgba(20,30,50,.025)}.card-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.ico{width:38px;height:38px;border-radius:11px;background:#f8eaf2;color:var(--brand);display:grid;place-items:center;font-size:18px}.number{font:800 30px Manrope,sans-serif;margin:18px 0 4px}.hint{font-size:11px;color:var(--muted)}.section{margin-top:22px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section-head h2{font:700 17px Manrope;margin:0}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px}.empty{padding:25px;text-align:center;color:var(--muted);font-size:13px}.status{display:inline-flex;padding:5px 9px;border-radius:20px;background:#e8f7ef;color:#16834b;font-size:11px;font-weight:700}.notice{background:#fff8e8;border:1px solid #f2dfb4;color:#76551b;padding:13px 15px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:18px}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 15% 15%,#f7e5f0,transparent 32%),radial-gradient(circle at 85% 85%,#ddf7f5,transparent 32%),#f6f7fb}.login-card{width:min(440px,100%);background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px;box-shadow:0 20px 60px rgba(23,32,51,.09)}.login-brand{display:flex;align-items:center;gap:11px;margin-bottom:28px}.login-brand .brand-mark{width:44px;height:44px}.login-brand strong{font:800 23px Manrope}.login-card h1{font:800 25px Manrope;margin:0 0 8px}.login-card p{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 24px}.field{display:block;margin:15px 0}.field span{display:block;font-size:12px;font-weight:700;margin-bottom:7px}.field input{width:100%;padding:13px 14px;border:1px solid #dfe3eb;border-radius:10px;outline:none}.field input:focus{border-color:var(--brand);box-shadow:0 0 0 3px #a72f7917}.primary{width:100%;border:0;border-radius:10px;padding:13px;background:var(--brand);color:#fff;font-weight:700;margin-top:8px}.primary:disabled{opacity:.6;cursor:wait}.msg{font-size:12px;line-height:1.5;margin-top:14px;color:#b42318;min-height:18px}.back{display:block;text-align:center;margin-top:22px;color:var(--muted);font-size:12px;text-decoration:none}
+.hidden{display:none!important}
+@media(max-width:950px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{grid-template-columns:210px 1fr}.content{padding:25px}}
+@media(max-width:650px){.shell{display:block}.sidebar{padding:12px 14px}.brand{padding:4px 5px 12px}.side-label,.side-foot{display:none}.nav{display:grid;grid-template-columns:repeat(3,1fr)}.nav a{text-align:center;padding:9px 4px;font-size:11px}.topbar{height:58px;padding:0 16px}.content{padding:22px 16px}.cards{grid-template-columns:1fr 1fr;gap:10px}.card{padding:14px}.number{font-size:25px}.heading{font-size:24px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="login-wrap">
+  <section class="login-card">
+    <div class="login-brand"><div class="brand-mark">A</div><strong>ADA <span style="color:#a72f79">ADMIN</span></strong></div>
+    <h1>Masuk ke Admin Panel</h1>
+    <p>Kelola produk dan pengalaman demo digital ADA melalui satu dashboard.</p>
+    <form id="loginForm">
+      <label class="field"><span>Email Admin</span><input id="email" type="email" autocomplete="username" placeholder="email admin" required></label>
+      <label class="field"><span>Password</span><input id="password" type="password" autocomplete="current-password" placeholder="Password akun admin" required></label>
+      <button class="primary" id="loginButton" type="submit">Masuk ke Dashboard</button>
+      <div id="loginMessage" class="msg" role="status"></div>
+    </form>
+    <a class="back" href="index.html">← Kembali ke Website ADA</a>
+  </section>
+</div>
+
+<div id="appView" class="shell hidden">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">A</div><span>ADA ADMIN</span></div>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="nav">
+      <a class="active" href="#dashboard">▦ &nbsp; Dashboard</a>
+      <a href="produk.html">▤ &nbsp; Katalog</a>
+      <a href="demo.html">▷ &nbsp; Demo Center</a>
+      <a href="#products">◇ &nbsp; Produk</a>
+      <a href="#categories">▧ &nbsp; Kategori</a>
+    </nav>
+    <div class="side-foot">Application Development Agency<br>Building Digital Solutions.</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="crumb">Workspace / <strong>Dashboard</strong></div><div class="top-actions"><span id="adminEmail" class="crumb"></span><div class="avatar">A</div><button class="logout" id="logoutButton">Keluar</button></div></header>
+    <div class="content">
+      <div class="eyebrow">OVERVIEW</div>
+      <h1 class="heading">Dashboard</h1>
+      <p class="sub">Ringkasan pengelolaan platform Application Development Agency.</p>
+      <section class="cards">
+        <article class="card"><div class="card-top"><span>Total Produk</span><span class="ico">▤</span></div><div class="number" id="productCount">—</div><div class="hint">Seluruh data produk</div></article>
+        <article class="card"><div class="card-top"><span>Produk Published</span><span class="ico">✓</span></div><div class="number" id="publishedCount">—</div><div class="hint">Tampil di katalog publik</div></article>
+        <article class="card"><div class="card-top"><span>Kategori Aktif</span><span class="ico">▧</span></div><div class="number" id="categoryCount">—</div><div class="hint">Kategori aplikasi</div></article>
+        <article class="card"><div class="card-top"><span>Demo Publik</span><span class="ico">▷</span></div><div class="number" id="demoCount">—</div><div class="hint">Produk dengan tautan demo publik</div></article>
+      </section>
+      <section class="section" id="products"><div class="section-head"><h2>Produk Terbaru</h2><span class="status">Terhubung ke Supabase</span></div><div class="panel" id="productPanel"><div class="empty">Memuat data produk...</div></div></section>
+      <section class="section" id="categories"><div class="section-head"><h2>Ringkasan Kategori</h2></div><div class="panel" id="categoryPanel"><div class="empty">Memuat kategori...</div></div></section>
+      <div class="notice">Tahap pertama ini berfokus pada login aman dan ringkasan data. Form tambah/edit/hapus produk akan diaktifkan setelah kebijakan akses (RLS) untuk admin diverifikasi.</div>
+    </div>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ADA_SUPABASE_URL = "https://brrdjsbnzhjwcmunakyi.supabase.co";
+const ADA_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_knKHvplrR1ReMIMwI4HBfw_GnOQVm7J";
+const adaDb = window.supabase.createClient(ADA_SUPABASE_URL, ADA_SUPABASE_PUBLISHABLE_KEY);
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function showLogin(message=""){ $("loginView").classList.remove("hidden");$("appView").classList.add("hidden");$("loginMessage").textContent=message; }
+function showApp(user){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("adminEmail").textContent=user.email||"Admin";}
+async function loadDashboard(){
+  const [all,pub,cats,demos,recent,catList] = await Promise.all([
+    adaDb.from("products").select("id",{count:"exact",head:true}),
+    adaDb.from("products").select("id",{count:"exact",head:true}).eq("status","published"),
+    adaDb.from("categories").select("id",{count:"exact",head:true}).eq("is_active",true),
+    adaDb.from("products").select("id",{count:"exact",head:true}).eq("status","published").eq("access_type","public").not("demo_url","is",null),
+    adaDb.from("products").select("id,name,status,access_type,created_at").order("created_at",{ascending:false}).limit(5),
+    adaDb.from("categories").select("id,name,is_active").order("name")
+  ]);
+  const firstError=all.error||pub.error||cats.error||demos.error||recent.error||catList.error;
+  if(firstError){$("productPanel").innerHTML='<div class="empty">Data belum dapat dimuat. Periksa izin SELECT admin pada Supabase.</div>';$("categoryPanel").innerHTML='<div class="empty">Kategori belum dapat dimuat.</div>';console.error(firstError);return;}
+  $("productCount").textContent=all.count??0;$("publishedCount").textContent=pub.count??0;$("categoryCount").textContent=cats.count??0;$("demoCount").textContent=demos.count??0;
+  const rows=recent.data||[];
+  $("productPanel").innerHTML=rows.length?`<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="text-align:left;color:#657086"><th style="padding:10px">Nama Produk</th><th>Status</th><th>Akses</th><th>Dibuat</th></tr></thead><tbody>${rows.map(p=>`<tr style="border-top:1px solid #edf0f5"><td style="padding:12px 10px;font-weight:700">${esc(p.name)}</td><td>${esc(p.status)}</td><td>${esc(p.access_type)}</td><td>${p.created_at?new Date(p.created_at).toLocaleDateString("id-ID"):"—"}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">Belum ada produk. Produk yang ditambahkan nanti akan muncul di sini.</div>';
+  const categories=catList.data||[];
+  $("categoryPanel").innerHTML=categories.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${categories.map(c=>`<span style="border:1px solid #e7eaf1;border-radius:20px;padding:8px 12px;font-size:12px">${esc(c.name)}${c.is_active?'':' · nonaktif'}</span>`).join("")}</div>`:'<div class="empty">Belum ada kategori.</div>';
+}
+async function verifySession(session){
+  if(!session?.user){showLogin();return;}
+  const {data:profile,error}=await adaDb.from("profiles").select("role,is_active,full_name").eq("id",session.user.id).maybeSingle();
+  if(error){await adaDb.auth.signOut();showLogin("Tidak dapat memverifikasi profil admin. Periksa kebijakan SELECT tabel profiles.");console.error(error);return;}
+  if(!profile || profile.role!=="admin" || profile.is_active!==true){await adaDb.auth.signOut();showLogin("Akun ini tidak memiliki akses Admin ADA.");return;}
+  showApp(session.user);
+  await loadDashboard();
+}
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();const btn=$("loginButton");btn.disabled=true;btn.textContent="Memeriksa...";
+  $("loginMessage").textContent="";
+  const {data,error}=await adaDb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
+  btn.disabled=false;btn.textContent="Masuk ke Dashboard";
+  if(error){showLogin("Login gagal. Periksa email dan password akun admin.");console.error(error);return;}
+  await verifySession(data.session);
+});
+$("logoutButton").addEventListener("click",async()=>{await adaDb.auth.signOut();showLogin("Kamu sudah keluar dari Admin ADA.");});
+adaDb.auth.getSession().then(({data})=>verifySession(data.session));
+adaDb.auth.onAuthStateChange((_event,session)=>{if(!session)showLogin();});
+</script>
+</body>
+</html>
