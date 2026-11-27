@@ -17,7 +17,16 @@ footer{margin-top:34px;background:#111827;color:#aeb6c5;padding:26px 0;font-size
 @media(max-width:560px){header{height:auto;padding:12px 0}.nav{align-items:flex-start;flex-direction:column}.links{flex-wrap:wrap;gap:10px 18px}.wrap{width:min(100% - 30px,1160px)}}
 
 .detail-wrap{padding:22px 0 18px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-.detail-visual{min-height:360px;background:#f0f3ff;display:grid;place-items:center;padding:25px}
+.detail-visual{min-height:360px;background:#f0f3ff;display:flex;flex-direction:column;justify-content:center;padding:24px;border-radius:14px}
+.detail-visual .demo-heading{margin:0 0 16px}
+.detail-visual .demo-heading h2{font-size:20px}
+.detail-visual .demo-grid{width:100%}
+.detail-visual .demo-card{padding:15px 13px}
+.detail-visual .demo-card h3{font-size:12px}
+.detail-visual .demo-card p{font-size:11px}
+.detail-visual .demo-open{font-size:11px}
+.detail-visual .demo-empty{background:#fff}
+@media(max-width:700px){.detail-visual{min-height:0;padding:16px}}
 .detail-visual img{max-width:100%;max-height:430px;object-fit:contain}
 .detail-placeholder{font:800 46px Manrope;color:var(--brand)}
 .detail-copy h1{font-size:clamp(28px,4vw,40px)}
@@ -50,11 +59,9 @@ footer{margin-top:34px;background:#111827;color:#aeb6c5;padding:26px 0;font-size
 <a href="index.html#tentang">Tentang ADA</a>
 </nav><a class="btn" href="index.html#kontak">Hubungi Kami</a>
 </div></header><main>
-<div class="wrap detail-wrap"><div id="detailVisual" class="detail-visual"><div class="detail-placeholder">ADA</div></div>
+<div class="wrap detail-wrap"><div id="detailVisual" class="detail-visual"><div class="demo-heading"><h2>Pilih Demo</h2><span id="demoCount" class="demo-count"></span></div><div id="detailAction" class="detail-actions"></div></div>
 <div class="detail-copy"><div id="detailCategory" class="detail-category">PRODUK ADA</div><h1 id="detailTitle">Memuat detail produk...</h1>
 <p id="detailDescription" class="detail-description">Mohon tunggu sebentar.</p>
-<div class="demo-heading"><h2>Pilih Demo</h2><span id="demoCount" class="demo-count"></span></div>
-<div id="detailAction" class="detail-actions"></div>
 <div class="notice">Informasi produk ditampilkan dari katalog ADA. Ketersediaan demo mengikuti pengaturan akses pada produk.</div>
 <div style="margin-top:14px"><a class="secondary" href="produk.html">← Kembali ke Katalog</a></div></div></div>
 </main><footer><div class="wrap">© 2026 Application Development Agency. Building Digital Solutions.</div></footer>
@@ -80,7 +87,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
  const p=pr.data;title.textContent=p.name;desc.textContent=p.description||"Informasi produk ADA.";
  const categoryMap=new Map((cr.data||[]).map(c=>[c.id,c.name]));
  category.textContent=(lr.data||[]).map(x=>categoryMap.get(x.category_id)).filter(Boolean).join(" • ")||"Produk ADA";
- visual.innerHTML=p.thumbnail_url?`<img src="${safeText(p.thumbnail_url)}" alt="${safeText(p.name)}">`:'<div class="detail-placeholder">ADA</div>';
+
  const demos=(dr.data||[]).filter(d=>d.demo_url);
  const demoIcon=(index)=>{
   if(index===0)return '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>';
