@@ -84,10 +84,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
    .eq("product_id",id).eq("is_active",true).order("sort_order",{ascending:true});
  if(!demoError && demos && demos.length){
    demoSection.hidden=false;
-   demoGrid.innerHTML=demos.map(d=>`<article class="demo-card"><h3>${safeText(d.demo_name)}</h3><p>Jelajahi fitur ${safeText(d.demo_name)} dari ${safeText(p.name)}.</p><a class="btn" href="${safeText(d.demo_url)}" target="_blank" rel="noopener noreferrer">Buka Demo →</a></article>`).join("");
+   demoGrid.innerHTML=demos.map(d=>`<article class="demo-card"><h3>${safeText(d.demo_name)}</h3><p>Jelajahi fitur ${safeText(d.demo_name)} dari ${safeText(p.name)}.</p><a class="btn" href="${safeText(d.demo_url)}" target="_blank" rel="noopener noreferrer">Buka Demo</a></article>`).join("");
    action.innerHTML="";
  }else if(p.demo_url){
-   action.innerHTML=`<a class="btn" href="${safeText(p.demo_url)}" target="_blank" rel="noopener">Buka Demo →</a>`;
+   action.innerHTML=`<a class="btn" href="${safeText(p.demo_url)}" target="_blank" rel="noopener">Buka Demo</a>`;
  }else{
    action.innerHTML='<span class="btn" style="opacity:.65">Demo segera tersedia</span>';
    if(demoError) console.warn("Demo produk belum dapat dimuat:",demoError.message);
