@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TK Digital — Dashboard Guru</title>
+<style>
+:root{--blue:#0877d8;--deep:#0756a8;--ink:#12335d;--muted:#71839b;--line:#e6eef7;--shadow:0 8px 24px #174a7b12}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#dff3ff,#f6fbff 55%,#eaf5ff);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+.app{max-width:1500px;margin:16px auto;padding:0 14px;display:grid;grid-template-columns:238px 1fr;gap:16px;min-height:calc(100vh - 32px)}
+.sidebar{background:linear-gradient(180deg,#087bdc,#0755aa);border-radius:24px;padding:18px 12px;color:white;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 22px}.star{font-size:34px}.brand b{font-size:21px;display:block}.brand small{opacity:.85}
+nav{display:grid;gap:7px}.nav{border:0;background:transparent;color:white;text-align:left;padding:12px 13px;border-radius:15px;font-size:15px;display:flex;gap:12px;align-items:center;cursor:pointer}.nav span{font-size:21px;width:25px;text-align:center}.nav:hover,.nav.active{background:#13b9f4;box-shadow:0 5px 14px #003c8240}.cheer{margin-top:auto;background:#fff;color:#17416e;border-radius:20px;padding:14px;text-align:center;font-weight:750}.cheer .animal{font-size:42px}
+main{min-width:0}.top{height:76px;background:#ffffffdc;border:1px solid #fff;border-radius:22px;display:flex;align-items:center;justify-content:space-between;padding:12px 22px;box-shadow:var(--shadow);gap:12px}.search{background:#edf6ff;border-radius:30px;padding:12px 18px;width:min(430px,48%);color:#8094ad}.user{display:flex;align-items:center;gap:10px;font-weight:800}.avatar{width:42px;height:42px;border-radius:50%;background:#fff0bd;display:grid;place-items:center;font-size:25px}.bell{font-size:23px;position:relative;margin-right:12px}.bell:after{content:"2";position:absolute;top:-9px;right:-10px;background:#ef4444;color:#fff;border-radius:50%;font-size:11px;padding:3px 6px}
+.content{padding:16px 2px 24px}.hero{border-radius:23px;min-height:205px;padding:28px 34px;overflow:hidden;position:relative;background:linear-gradient(105deg,#c7efff,#eafaff 55%,#a8e9b4);box-shadow:var(--shadow);display:flex;align-items:center}.hero h1{font-size:36px;line-height:1.08;margin:0 0 10px;color:#0755a8;max-width:500px}.hero p{font-size:17px;font-weight:650;margin:0}.heroart{position:absolute;right:5%;bottom:-8px;font-size:105px;white-space:nowrap;filter:drop-shadow(0 8px 3px #286a4430)}.rainbow{position:absolute;right:22%;top:12px;font-size:65px;opacity:.85}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:15px 0}.stat{border-radius:20px;padding:17px;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);min-width:0}.stat .ico{font-size:35px}.stat strong{font-size:28px;display:block}.stat small{font-weight:650}.s1{background:#079ce9;color:white}.s2{background:#baf2c9}.s3{background:#ffe19b}.s4{background:#dfccff}
+.columns{display:grid;grid-template-columns:1.08fr 1fr;gap:14px}.panel{background:#fff;border:1px solid #edf3fa;border-radius:21px;padding:17px;box-shadow:var(--shadow);min-width:0}.panel h2{font-size:19px;margin:0 0 14px;display:flex;align-items:center;gap:9px}.chart{height:155px;display:flex;align-items:end;justify-content:space-around;border-bottom:2px solid #dbe7f2;padding:10px 8px 0;background:repeating-linear-gradient(to bottom,transparent 0 41px,#edf3f8 42px 43px)}.barwrap{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px;font-weight:800}.bar{width:36px;border-radius:10px 10px 0 0;min-height:25px}.barwrap small{font-size:12px;color:#4d6380}.activity{display:grid}.act{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #edf2f7;font-size:13px}.act:last-child{border:0}.act .em{font-size:22px;background:#eef7ff;border-radius:12px;padding:7px}.act time{margin-left:auto;color:#8a9ab0;white-space:nowrap;font-size:11px}
+.quick{margin-top:14px}.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.tile{border:0;border-radius:16px;padding:13px 8px;cursor:pointer;font-weight:750;color:#16365c;min-height:95px}.tile span{display:block;font-size:28px;margin-bottom:5px}.tile:nth-child(1){background:#ffedc9}.tile:nth-child(2){background:#dff2ff}.tile:nth-child(3){background:#ffe8c6}.tile:nth-child(4){background:#d4f8dc}.tile:nth-child(5){background:#e9dcff}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 15px;gap:10px}.sectionhead h1{margin:0;font-size:27px;color:#0755a8}.sectionhead p{margin:5px 0 0;color:var(--muted)}.action{border:0;border-radius:12px;background:#087bdc;color:#fff;padding:11px 15px;font-weight:750;cursor:pointer}.table{width:100%;border-collapse:collapse;font-size:14px}.table th,.table td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line)}.table th{color:#69809b;background:#f6faff}.pill{border-radius:30px;padding:5px 10px;background:#e0f8e8;color:#16834a;font-weight:750;font-size:12px}.muted{color:var(--muted)}.mobilehint{display:none;color:#71839b;font-size:11px;margin:6px 2px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{padding:10px;position:sticky;top:0;z-index:3}.brand{padding:2px 8px 8px}.brand small,.cheer{display:none}nav{display:flex;overflow:auto}.nav{white-space:nowrap;padding:9px 12px}.top{height:auto}.heroart{right:0;font-size:80px;opacity:.75}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.app{padding:0;margin:0;gap:8px}.sidebar{border-radius:0 0 18px 18px}.top{margin:0 9px;padding:10px 13px}.search{width:48%;font-size:12px}.user{font-size:12px}.user .avatar{width:34px;height:34px}.content{padding:10px}.hero{min-height:170px;padding:20px}.hero h1{font-size:25px;max-width:270px}.hero p{font-size:13px;max-width:230px}.heroart{font-size:54px;right:0}.rainbow{font-size:38px;right:10%}.stats{gap:8px}.stat{padding:12px;gap:8px}.stat .ico{font-size:26px}.stat strong{font-size:22px}.stat small{font-size:11px}.columns{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(3,1fr)}.sectionhead h1{font-size:22px}.table{font-size:12px}.table th,.table td{padding:10px 6px}.mobilehint{display:block}}
+</style></head>
+<body><div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="star">⭐</div><div><b>TK Digital</b><small>Belajar · Bermain · Tumbuh</small></div></div>
+ <nav id="nav">
+  <button class="nav active" data-page="Dashboard"><span>🏠</span>Dashboard</button>
+  <button class="nav" data-page="Kelas Saya"><span>🏫</span>Kelas Saya</button>
+  <button class="nav" data-page="Data Siswa"><span>🎒</span>Data Siswa</button>
+  <button class="nav" data-page="Absensi"><span>✅</span>Absensi</button>
+  <button class="nav" data-page="Perkembangan"><span>🌱</span>Perkembangan Anak</button>
+  <button class="nav" data-page="Kegiatan Belajar"><span>📚</span>Kegiatan Belajar</button>
+  <button class="nav" data-page="Gizi Siswa"><span>🥗</span>Gizi Siswa</button>
+ </nav>
+ <div class="cheer"><div class="animal">🦒</div>Semangat mengajar!</div>
+</aside>
+<main>
+ <header class="top"><div class="search">🔎 &nbsp; Cari menu...</div><div style="display:flex;align-items:center;gap:18px"><div class="bell">♧</div><div class="user"><div class="avatar">🌼</div><div>Ibu Maya<br><small style="font-weight:500;color:#71839b">Guru · Kelompok B</small></div>⌄</div></div></header>
+ <div class="content" id="content">
+  <section class="hero"><div><h1>Halo, Ibu Maya!<br>Selamat Mengajar 🌼</h1><p>Hari ini kita dampingi anak-anak<br>belajar, bermain, dan bertumbuh.</p></div><div class="rainbow">🌈</div><div class="heroart">🏫　🧸　🪁</div></section>
+  <section class="stats">
+   <div class="stat s1"><div class="ico">🎒</div><div><strong>26</strong><small>Siswa di Kelas Saya</small></div></div>
+   <div class="stat s2"><div class="ico">✅</div><div><strong>23</strong><small>Hadir Hari Ini</small></div></div>
+   <div class="stat s3"><div class="ico">📝</div><div><strong>3</strong><small>Belum Diabsen</small></div></div>
+   <div class="stat s4"><div class="ico">🌱</div><div><strong>8</strong><small>Catatan Perkembangan</small></div></div>
+  </section>
+  <section class="columns">
+   <div class="panel"><h2>⭐ Kehadiran Kelompok B</h2><div class="chart">
+    <div class="barwrap"><b>92%</b><div class="bar" style="height:72%;background:#2196ed"></div><small>Sen</small></div>
+    <div class="barwrap"><b>88%</b><div class="bar" style="height:65%;background:#ffb632"></div><small>Sel</small></div>
+    <div class="barwrap"><b>95%</b><div class="bar" style="height:85%;background:#54cf82"></div><small>Rab</small></div>
+    <div class="barwrap"><b>90%</b><div class="bar" style="height:70%;background:#a77af2"></div><small>Kam</small></div>
+    <div class="barwrap"><b>88%</b><div class="bar" style="height:65%;background:#19c9bb"></div><small>Jum</small></div>
+   </div></div>
+   <div class="panel"><h2>🔔 Aktivitas Terbaru</h2><div class="activity">
+    <div class="act"><span class="em">🧸</span><b>Catatan perkembangan Aisyah</b><time>09.15</time></div>
+    <div class="act"><span class="em">🗓️</span><b>Absensi kelas diperbarui</b><time>08.30</time></div>
+    <div class="act"><span class="em">📚</span><b>Kegiatan tema Binatang</b><time>Kemarin</time></div>
+    <div class="act"><span class="em">🥗</span><b>Pemantauan gizi terjadwal</b><time>Kemarin</time></div>
+   </div></div>
+  </section>
+  <section class="panel quick"><h2>⭐ Menu Cepat</h2><div class="tiles">
+   <button class="tile" data-page="Data Siswa"><span>🧸</span>Data Siswa</button><button class="tile" data-page="Absensi"><span>🗓️</span>Absensi</button><button class="tile" data-page="Perkembangan"><span>🌱</span>Perkembangan</button><button class="tile" data-page="Kegiatan Belajar"><span>📚</span>Kegiatan Belajar</button><button class="tile" data-page="Gizi Siswa"><span>🥗</span>Gizi Siswa</button>
+  </div></section>
+ </div>
+</main></div>
+<script>
+const sample={
+"Kelas Saya":[["Kelas","Wali Kelas","Jumlah Siswa","Akses"],["Kelompok B","Ibu Maya","26","Kelas saya"]],
+"Data Siswa":[["Nama Siswa","Kelas","Nama Orang Tua","Status"],["Aisyah Putri","Kelompok B","Ibu Sari","Aktif"],["Nadia Zahra","Kelompok B","Ibu Lina","Aktif"],["Fajar Ramadhan","Kelompok B","Bapak Andi","Aktif"],["Rafa Pratama","Kelompok B","Ibu Wati","Aktif"]],
+"Absensi":[["Nama Siswa","Kelas","Kehadiran","Keterangan"],["Aisyah Putri","Kelompok B","Hadir","—"],["Nadia Zahra","Kelompok B","Hadir","—"],["Fajar Ramadhan","Kelompok B","Izin","Sakit"],["Rafa Pratama","Kelompok B","Belum diabsen","—"]],
+"Perkembangan":[["Nama Siswa","Aspek","Catatan Guru","Tanggal"],["Aisyah Putri","Bahasa","Mampu bercerita dengan runtut","16 Nov"],["Nadia Zahra","Sosial-emosional","Mulai aktif bekerja sama","16 Nov"],["Fajar Ramadhan","Motorik","Koordinasi gerak berkembang","15 Nov"]],
+"Kegiatan Belajar":[["Tanggal","Tema Kegiatan","Aktivitas","Status"],["16 Nov","Binatang","Mengenal hewan dan habitat","Direncanakan"],["17 Nov","Tanaman","Menanam biji bersama","Direncanakan"],["18 Nov","Keluargaku","Bercerita tentang keluarga","Direncanakan"]],
+"Gizi Siswa":[["Nama Siswa","Berat Badan","Tinggi Badan","Catatan"],["Aisyah Putri","18 kg","108 cm","Contoh data"],["Nadia Zahra","17,5 kg","107 cm","Contoh data"],["Fajar Ramadhan","18 kg","109 cm","Contoh data"]]
+};
+const dashboardMarkup=document.getElementById("content").innerHTML;
+function page(name){
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+ const root=document.getElementById("content");
+ if(name==="Dashboard"){root.innerHTML=dashboardMarkup;return}
+ const rows=sample[name];
+ let body=rows?`<div class="panel" style="overflow:auto"><table class="table"><thead><tr>${rows[0].map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.slice(1).map(r=>`<tr>${r.map((x,i)=>`<td>${i===r.length-1?`<span class="pill">${x}</span>`:x}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:`<div class="panel"><h2>📚 ${name}</h2><p class="muted">Halaman demo untuk ${name}.</p></div>`;
+ let extra="";
+ if(name==="Absensi")extra=`<div class="panel" style="margin-top:14px"><h2>✅ Aksi Absensi</h2><p class="muted">Pada aplikasi sebenarnya, guru dapat mengisi status kehadiran setiap siswa di kelas yang diampu.</p><button class="action" onclick="alert('Contoh: form absensi akan dibuka pada aplikasi lengkap.')">＋ Isi Absensi</button></div>`;
+ if(name==="Perkembangan")extra=`<div class="panel" style="margin-top:14px"><h2>🌱 Aspek Perkembangan Anak</h2><p class="muted">Nilai agama dan moral · Fisik-motorik · Kognitif · Bahasa · Sosial-emosional · Seni.</p><button class="action" onclick="alert('Contoh: form catatan perkembangan akan dibuka.')">＋ Tambah Catatan</button></div>`;
+ if(name==="Gizi Siswa")extra=`<div class="panel" style="margin-top:14px"><h2>🥗 Catatan Pemantauan Gizi</h2><p class="muted">Data tinggi dan berat pada demo hanya contoh. Penilaian status gizi memerlukan usia, jenis kelamin, standar pertumbuhan yang sesuai, dan tenaga kesehatan yang berwenang.</p></div>`;
+ if(name==="Kegiatan Belajar")extra=`<div class="panel" style="margin-top:14px"><h2>📚 Rencana Kegiatan</h2><p class="muted">Guru dapat menambahkan tema, tujuan kegiatan, alat belajar, dan catatan hasil kegiatan untuk kelasnya.</p><button class="action" onclick="alert('Contoh: form kegiatan belajar akan dibuka.')">＋ Tambah Kegiatan</button></div>`;
+ root.innerHTML=`<div class="sectionhead"><div><h1>${name}</h1><p>TK Digital · Ibu Maya · Akses Kelompok B</p></div>${name==="Kelas Saya"?"":`<button class="action" onclick="alert('Form ${name} pada demo akan dikembangkan berikutnya.')">＋ Tambah Data</button>`}</div>${body}${extra}<p class="mobilehint">Prototype demo — data yang ditampilkan adalah data contoh.</p>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(b)page(b.dataset.page)});
+</script></body></html>
